@@ -107,13 +107,27 @@
             width: 100%;
         }
         
-        .cart-icon {
-            position: relative;
-            cursor: pointer;
-            font-size: 1.5rem;
+        .header-icons {
+            display: flex;
+            align-items: center;
         }
         
-        .cart-count {
+        .icon-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            margin-left: 1rem;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .icon-btn:hover {
+            color: var(--accent);
+        }
+        
+        .cart-count, .user-badge {
             position: absolute;
             top: -8px;
             right: -8px;
@@ -127,6 +141,11 @@
             align-items: center;
             font-size: 0.8rem;
             font-weight: bold;
+        }
+        
+        .user-badge {
+            background-color: #4a90e2;
+            color: white;
         }
         
         /* Hero Section */
@@ -281,7 +300,7 @@
             background-color: var(--primary);
         }
         
-        /* Cart Modal */
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -299,7 +318,7 @@
         .modal-content {
             background: white;
             width: 90%;
-            max-width: 800px;
+            max-width: 500px;
             border-radius: 10px;
             padding: 2rem;
             max-height: 80vh;
@@ -315,6 +334,40 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--gray);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-switch {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .form-switch a {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        /* Cart Modal */
+        .cart-modal-content {
+            max-width: 800px;
         }
         
         .cart-items {
@@ -596,9 +649,15 @@
                         <li><a href="#contact">Kontakt</a></li>
                     </ul>
                 </nav>
-                <div class="cart-icon" id="cartIcon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">0</span>
+                <div class="header-icons">
+                    <button class="icon-btn" id="userIcon">
+                        <i class="fas fa-user"></i>
+                        <span class="user-badge" id="userBadge" style="display: none;">✓</span>
+                    </button>
+                    <button class="icon-btn" id="cartIcon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -662,9 +721,68 @@
         </div>
     </section>
 
+    <!-- User Account Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="userModalTitle">Anmelden</h2>
+            
+            <form id="loginForm" style="display: block;">
+                <div class="form-group">
+                    <label for="loginEmail">E-Mail</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Passwort</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%;">Anmelden</button>
+                
+                <div class="form-switch">
+                    <p>Noch kein Konto? <a id="switchToRegister">Registrieren</a></p>
+                </div>
+            </form>
+            
+            <form id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label for="registerName">Name</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">E-Mail</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Passwort</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerAddress">Adresse</label>
+                    <input type="text" id="registerAddress" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerBirthYear">Geburtsjahr (für Seniorenrabatt)</label>
+                    <input type="number" id="registerBirthYear" min="1900" max="2023">
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%;">Registrieren</button>
+                
+                <div class="form-switch">
+                    <p>Bereits ein Konto? <a id="switchToLogin">Anmelden</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Cart Modal -->
     <div class="modal" id="cartModal">
-        <div class="modal-content">
+        <div class="modal-content cart-modal-content">
             <span class="close-modal">&times;</span>
             <h2>Ihr Warenkorb</h2>
             
@@ -672,14 +790,14 @@
                 <!-- Cart items will be dynamically added here -->
             </div>
             
-            <div class="discount-section">
+            <div class="discount-section" id="discountSection" style="display: none;">
                 <h3>Seniorenrabatt</h3>
                 <p>Für Kunden ab 60 Jahren:</p>
                 <div class="discount-option">
                     <input type="checkbox" id="seniorDiscount">
                     <label for="seniorDiscount">Ich bin über 60 Jahre alt und möchte den Seniorenrabatt erhalten</label>
                 </div>
-                <p id="discountInfo">Bei einem Einkauf über 100€: 30% Rabatt | Über 60€: 20% Rabatt | Über 30€: 10% Rabatt</p>
+                <p id="discountInfo">Bei einem Einkauf über 100€: 30% Rabatt | Über 60€: 20% Rabatt</p>
             </div>
             
             <div class="cart-summary">
@@ -695,9 +813,12 @@
                     <span>Gesamt:</span>
                     <span id="total">0.00€</span>
                 </div>
+                <div class="summary-row" id="deliveryMessage">
+                    <!-- Delivery message will appear here -->
+                </div>
             </div>
             
-            <button class="checkout-btn">Zur Kasse gehen</button>
+            <button class="checkout-btn" id="checkoutBtn">Zur Kasse gehen</button>
         </div>
     </div>
 
@@ -746,34 +867,120 @@
     </footer>
 
     <script>
-        // Sample product data
+        // Sample product data with realistic kiosk items
         const products = [
-            { id: 1, name: "Frisches Brot", price: 3.50, category: "food", image: "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 2, name: "Mineralwasser 1L", price: 0.80, category: "drinks", image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 3, name: "Tageszeitung", price: 2.50, category: "newspapers", image: "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 4, name: "Zigaretten", price: 7.50, category: "tobacco", image: "https://images.unsplash.com/photo-1588159343749-ac9f5bfafa78?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 5, name: "Obstkorb", price: 12.90, category: "food", image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 6, name: "Bier (6er Pack)", price: 8.90, category: "drinks", image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 7, name: "Zeitschrift", price: 4.20, category: "newspapers", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 8, name: "Zigarre", price: 5.80, category: "tobacco", image: "https://images.unsplash.com/photo-1611251432887-30d28e2db793?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 9, name: "Frischkäse", price: 2.30, category: "food", image: "https://images.unsplash.com/photo-1567176303326-58bcfcad145d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 10, name: "Softdrink 1L", price: 1.50, category: "drinks", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 11, name: "Comic-Heft", price: 3.80, category: "newspapers", image: "https://images.unsplash.com/photo-1629992101755-1f0d4b7c9b8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
-            { id: 12, name: "Feuerzeug", price: 1.20, category: "tobacco", image: "https://images.unsplash.com/photo-1585-4708357-4594a51f5d3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" }
+            { id: 1, name: "Frisches Brot", price: 2.50, category: "food", image: "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 2, name: "Mineralwasser 1L", price: 0.80, category: "drinks", image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 3, name: "BILD Zeitung", price: 2.20, category: "newspapers", image: "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 4, name: "Marlboro Gold", price: 7.50, category: "tobacco", image: "https://images.unsplash.com/photo-1588159343749-ac9f5bfafa78?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 5, name: "Banane", price: 0.30, category: "food", image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 6, name: "Bier (0,5L)", price: 1.20, category: "drinks", image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 7, name: "DER SPIEGEL", price: 5.80, category: "newspapers", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 8, name: "Feuerzeug", price: 1.50, category: "tobacco", image: "https://images.unsplash.com/photo-1585771724684-382f8ca1bb6a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 9, name: "Milch 1L", price: 1.20, category: "food", image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 10, name: "Cola 1L", price: 1.80, category: "drinks", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 11, name: "Stern Magazine", price: 4.20, category: "newspapers", image: "https://images.unsplash.com/photo-1629992101755-1f0d4b7c9b8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 12, name: "Zigarettenetui", price: 3.50, category: "tobacco", image: "https://images.unsplash.com/photo-1585-4708357-4594a51f5d3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 13, name: "Butter", price: 2.20, category: "food", image: "https://images.unsplash.com/photo-1567176303326-58bcfcad145d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 14, name: "Apfelsaft 1L", price: 2.10, category: "drinks", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 15, name: "FAZ", price: 3.00, category: "newspapers", image: "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" },
+            { id: 16, name: "Tabak 30g", price: 12.50, category: "tobacco", image: "https://images.unsplash.com/photo-1611251432887-30d28e2db793?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" }
         ];
 
         // Cart functionality
         let cart = [];
+        let currentUser = null;
+
+        // DOM Elements
         const cartIcon = document.getElementById('cartIcon');
+        const userIcon = document.getElementById('userIcon');
+        const userBadge = document.getElementById('userBadge');
         const cartModal = document.getElementById('cartModal');
-        const closeModal = document.querySelector('.close-modal');
+        const userModal = document.getElementById('userModal');
+        const closeModalButtons = document.querySelectorAll('.close-modal');
         const cartItemsContainer = document.getElementById('cartItems');
         const cartCount = document.querySelector('.cart-count');
         const subtotalElement = document.getElementById('subtotal');
         const discountElement = document.getElementById('discount');
         const totalElement = document.getElementById('total');
         const seniorDiscountCheckbox = document.getElementById('seniorDiscount');
+        const discountSection = document.getElementById('discountSection');
+        const deliveryMessage = document.getElementById('deliveryMessage');
+        const checkoutBtn = document.getElementById('checkoutBtn');
         const productsGrid = document.getElementById('productsGrid');
+        const userModalTitle = document.getElementById('userModalTitle');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const switchToLogin = document.getElementById('switchToLogin');
+
+        // Check if user is logged in on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                userBadge.style.display = 'flex';
+            }
+            
+            // Display all products initially
+            displayProducts();
+            
+            // Category filter functionality
+            document.querySelectorAll('.category-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.category-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    e.target.classList.add('active');
+                    displayProducts(e.target.getAttribute('data-category'));
+                });
+            });
+            
+            // Modal functionality
+            cartIcon.addEventListener('click', () => {
+                cartModal.style.display = 'flex';
+            });
+            
+            userIcon.addEventListener('click', () => {
+                userModal.style.display = 'flex';
+            });
+            
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    cartModal.style.display = 'none';
+                    userModal.style.display = 'none';
+                });
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === cartModal || e.target === userModal) {
+                    cartModal.style.display = 'none';
+                    userModal.style.display = 'none';
+                }
+            });
+            
+            // Senior discount checkbox change
+            seniorDiscountCheckbox.addEventListener('change', calculateTotals);
+            
+            // Checkout button
+            checkoutBtn.addEventListener('click', processCheckout);
+            
+            // User account forms
+            switchToRegister.addEventListener('click', () => {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                userModalTitle.textContent = 'Registrieren';
+            });
+            
+            switchToLogin.addEventListener('click', () => {
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                userModalTitle.textContent = 'Anmelden';
+            });
+            
+            loginForm.addEventListener('submit', handleLogin);
+            registerForm.addEventListener('submit', handleRegister);
+        });
 
         // Display products
         function displayProducts(category = 'all') {
@@ -837,6 +1044,7 @@
             
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = '<p>Ihr Warenkorb ist leer.</p>';
+                discountSection.style.display = 'none';
             } else {
                 cart.forEach(item => {
                     const cartItem = document.createElement('div');
@@ -859,6 +1067,13 @@
                     `;
                     cartItemsContainer.appendChild(cartItem);
                 });
+                
+                // Show discount section if user is logged in and is a senior
+                if (currentUser && isSenior(currentUser.birthYear)) {
+                    discountSection.style.display = 'block';
+                } else {
+                    discountSection.style.display = 'none';
+                }
                 
                 // Add event listeners to quantity buttons
                 document.querySelectorAll('.quantity-btn.plus').forEach(button => {
@@ -901,14 +1116,12 @@
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             let discount = 0;
             
-            // Apply senior discount if checkbox is checked
-            if (seniorDiscountCheckbox.checked) {
+            // Apply senior discount if checkbox is checked and user is a senior
+            if (seniorDiscountCheckbox.checked && currentUser && isSenior(currentUser.birthYear)) {
                 if (subtotal > 100) {
                     discount = subtotal * 0.3;
                 } else if (subtotal > 60) {
                     discount = subtotal * 0.2;
-                } else if (subtotal > 30) {
-                    discount = subtotal * 0.1;
                 }
             }
             
@@ -917,6 +1130,115 @@
             subtotalElement.textContent = `${subtotal.toFixed(2)}€`;
             discountElement.textContent = `${discount.toFixed(2)}€`;
             totalElement.textContent = `${total.toFixed(2)}€`;
+            
+            // Update delivery message
+            if (subtotal < 50) {
+                deliveryMessage.innerHTML = `<span style="color: #e74c3c;">Mindestbestellwert für Lieferung: 50€. Noch ${(50 - subtotal).toFixed(2)}€ benötigt.</span>`;
+            } else {
+                deliveryMessage.innerHTML = `<span style="color: #27ae60;">Bestellung erreicht Mindestbestellwert. Lieferung möglich!</span>`;
+            }
+        }
+
+        // Process checkout
+        function processCheckout() {
+            if (cart.length === 0) {
+                alert('Ihr Warenkorb ist leer. Bitte fügen Sie Produkte hinzu.');
+                return;
+            }
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            if (subtotal < 50) {
+                alert('Der Mindestbestellwert für die Lieferung beträgt 50€. Bitte fügen Sie weitere Produkte hinzu.');
+                return;
+            }
+            
+            if (!currentUser) {
+                alert('Bitte melden Sie sich an oder registrieren Sie sich, um fortzufahren.');
+                userModal.style.display = 'flex';
+                cartModal.style.display = 'none';
+                return;
+            }
+            
+            alert('Vielen Dank für Ihre Bestellung! Wir werden Sie in Kürze kontaktieren, um die Lieferdetails zu besprechen.');
+            cart = [];
+            updateCart();
+            cartModal.style.display = 'none';
+            seniorDiscountCheckbox.checked = false;
+        }
+
+        // Check if user is a senior (60+ years old)
+        function isSenior(birthYear) {
+            if (!birthYear) return false;
+            const currentYear = new Date().getFullYear();
+            return (currentYear - birthYear) >= 60;
+        }
+
+        // Handle login
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simple validation (in a real app, this would be server-side)
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                userBadge.style.display = 'flex';
+                userModal.style.display = 'none';
+                showNotification('Erfolgreich angemeldet!');
+                updateCart(); // Refresh to show discount options if applicable
+            } else {
+                alert('Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.');
+            }
+        }
+
+        // Handle registration
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const address = document.getElementById('registerAddress').value;
+            const birthYear = document.getElementById('registerBirthYear').value;
+            
+            // Simple validation
+            if (!name || !email || !password || !address) {
+                alert('Bitte füllen Sie alle Pflichtfelder aus.');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            // Check if user already exists
+            if (users.find(u => u.email === email)) {
+                alert('Ein Konto mit dieser E-Mail existiert bereits.');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                password,
+                address,
+                birthYear: birthYear ? parseInt(birthYear) : null
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Log in the new user
+            currentUser = newUser;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            userBadge.style.display = 'flex';
+            userModal.style.display = 'none';
+            showNotification('Konto erfolgreich erstellt und angemeldet!');
+            updateCart(); // Refresh to show discount options if applicable
         }
 
         // Show notification
@@ -944,61 +1266,6 @@
                 }, 300);
             }, 3000);
         }
-
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', () => {
-            // Display all products initially
-            displayProducts();
-            
-            // Category filter functionality
-            document.querySelectorAll('.category-btn').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    document.querySelectorAll('.category-btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    e.target.classList.add('active');
-                    displayProducts(e.target.getAttribute('data-category'));
-                });
-            });
-            
-            // Cart modal functionality
-            cartIcon.addEventListener('click', () => {
-                cartModal.style.display = 'flex';
-            });
-            
-            closeModal.addEventListener('click', () => {
-                cartModal.style.display = 'none';
-            });
-            
-            window.addEventListener('click', (e) => {
-                if (e.target === cartModal) {
-                    cartModal.style.display = 'none';
-                }
-            });
-            
-            // Senior discount checkbox change
-            seniorDiscountCheckbox.addEventListener('change', calculateTotals);
-            
-            // Checkout button
-            document.querySelector('.checkout-btn').addEventListener('click', () => {
-                if (cart.length === 0) {
-                    alert('Ihr Warenkorb ist leer. Bitte fügen Sie Produkte hinzu.');
-                    return;
-                }
-                
-                const total = parseFloat(totalElement.textContent);
-                if (total < 50) {
-                    alert('Der Mindestbestellwert für die Lieferung beträgt 50€. Bitte fügen Sie weitere Produkte hinzu.');
-                    return;
-                }
-                
-                alert('Vielen Dank für Ihre Bestellung! Wir werden Sie in Kürze kontaktieren, um die Lieferdetails zu besprechen.');
-                cart = [];
-                updateCart();
-                cartModal.style.display = 'none';
-                seniorDiscountCheckbox.checked = false;
-            });
-        });
 
         // Add CSS for notification animation
         const style = document.createElement('style');
