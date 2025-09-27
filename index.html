@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiosk Hannover - Ihr lokaler Lieferdienst</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c5530;
+            --secondary: #4a7c59;
+            --accent: #f8b500;
+            --light: #f5f5f5;
+            --dark: #333;
+            --gray: #777;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            animation: fadeIn 1s ease;
+        }
+        
+        .logo i {
+            font-size: 2.5rem;
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent);
+            color: var(--dark);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+            animation: zoomIn 1.5s ease;
+        }
+        
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--dark);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Products Section */
+        .section-title {
+            text-align: center;
+            margin: 3rem 0 2rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            display: inline-block;
+            font-size: 2.2rem;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+        }
+        
+        .categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .category-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1.2rem;
+            margin: 0.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .category-btn.active, .category-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: slideUp 0.5s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .product-img {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 1.2rem;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.7rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--primary);
+        }
+        
+        /* Cart Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            padding: 2rem;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.5s ease;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .cart-items {
+            margin: 1.5rem 0;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .item-details {
+            display: flex;
+            align-items: center;
+        }
+        
+        .item-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 1rem;
+        }
+        
+        .item-info h4 {
+            margin-bottom: 0.3rem;
+        }
+        
+        .item-controls {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .item-quantity {
+            margin: 0 0.8rem;
+            font-weight: 600;
+        }
+        
+        .item-price {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 80px;
+            text-align: right;
+        }
+        
+        .remove-item {
+            color: #ff4d4d;
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+        
+        .cart-summary {
+            border-top: 2px solid #eee;
+            padding-top: 1.5rem;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+        
+        .summary-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .discount-section {
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .discount-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .discount-option input {
+            margin-right: 0.5rem;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+        
+        .checkout-btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        /* Delivery Info */
+        .delivery-info {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .info-cards {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .info-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            width: 250px;
+            margin: 1rem;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .info-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-column ul li a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes zoomIn {
+            from { transform: scale(1.1); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .info-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-store"></i>
+                    <h1>Kiosk Hannover</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Startseite</a></li>
+                        <li><a href="#products">Produkte</a></li>
+                        <li><a href="#delivery">Lieferung</a></li>
+                        <li><a href="#about">Über uns</a></li>
+                        <li><a href="#contact">Kontakt</a></li>
+                    </ul>
+                </nav>
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Willkommen bei Kiosk Hannover</h2>
+            <p>Ihr lokaler Kiosk mit Lieferdienst – frische Produkte direkt zu Ihnen nach Hause. Bestellen Sie jetzt und wir liefern innerhalb von 20km!</p>
+            <a href="#products" class="btn">Jetzt einkaufen</a>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products">
+        <div class="container">
+            <div class="section-title">
+                <h2>Unsere Produkte</h2>
+            </div>
+            
+            <div class="categories">
+                <button class="category-btn active" data-category="all">Alle Produkte</button>
+                <button class="category-btn" data-category="food">Lebensmittel</button>
+                <button class="category-btn" data-category="drinks">Getränke</button>
+                <button class="category-btn" data-category="tobacco">Tabakwaren</button>
+                <button class="category-btn" data-category="newspapers">Zeitschriften</button>
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be dynamically added here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Info -->
+    <section class="delivery-info" id="delivery">
+        <div class="container">
+            <h2>Lieferinformationen</h2>
+            <p>Wir liefern Ihre Bestellung schnell und zuverlässig innerhalb von 20km um Hannover</p>
+            
+            <div class="info-cards">
+                <div class="info-card">
+                    <i class="fas fa-truck"></i>
+                    <h3>Schnelle Lieferung</h3>
+                    <p>Innerhalb von 1-2 Stunden bei Ihnen</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-euro-sign"></i>
+                    <h3>Mindestbestellwert</h3>
+                    <p>Nur 50€ für die Lieferung</p>
+                </div>
+                
+                <div class="info-card">
+                    <i class="fas fa-id-card"></i>
+                    <h3>Seniorenrabatt</h3>
+                    <p>Spezielle Rabatte für ältere Menschen</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Ihr Warenkorb</h2>
+            
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be dynamically added here -->
+            </div>
+            
+            <div class="discount-section">
+                <h3>Seniorenrabatt</h3>
+                <p>Für Kunden ab 60 Jahren:</p>
+                <div class="discount-option">
+                    <input type="checkbox" id="seniorDiscount">
+                    <label for="seniorDiscount">Ich bin über 60 Jahre alt und möchte den Seniorenrabatt erhalten</label>
+                </div>
+                <p id="discountInfo">Bei einem Einkauf über 100€: 30% Rabatt | Über 60€: 20% Rabatt | Über 30€: 10% Rabatt</p>
+            </div>
+            
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Zwischensumme:</span>
+                    <span id="subtotal">0.00€</span>
+                </div>
+                <div class="summary-row">
+                    <span>Rabatt:</span>
+                    <span id="discount">0.00€</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Gesamt:</span>
+                    <span id="total">0.00€</span>
+                </div>
+            </div>
+            
+            <button class="checkout-btn">Zur Kasse gehen</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Kiosk Hannover</h3>
+                    <p>Ihr vertrauensvoller Kiosk in Hannover mit Lieferdienst. Frische Produkte, freundlicher Service.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Kontakt</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Musterstraße 123, 30159 Hannover</li>
+                        <li><i class="fas fa-phone"></i> +49 511 12345678</li>
+                        <li><i class="fas fa-envelope"></i> info@kiosk-hannover.de</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Öffnungszeiten</h3>
+                    <ul>
+                        <li>Mo-Fr: 7:00 - 22:00 Uhr</li>
+                        <li>Sa-So: 8:00 - 22:00 Uhr</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Links</h3>
+                    <ul>
+                        <li><a href="#home">Startseite</a></li>
+                        <li><a href="#products">Produkte</a></li>
+                        <li><a href="#delivery">Lieferung</a></li>
+                        <li><a href="#about">Über uns</a></li>
+                        <li><a href="#contact">Kontakt</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Kiosk Hannover. Alle Rechte vorbehalten.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample product data
+        const products = [
+            { id: 1, name: "Frisches Brot", price: 3.50, category: "food", image: "https://images.unsplash.com/photo-1549931319-a545dcf3bc73?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 2, name: "Mineralwasser 1L", price: 0.80, category: "drinks", image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 3, name: "Tageszeitung", price: 2.50, category: "newspapers", image: "https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 4, name: "Zigaretten", price: 7.50, category: "tobacco", image: "https://images.unsplash.com/photo-1588159343749-ac9f5bfafa78?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 5, name: "Obstkorb", price: 12.90, category: "food", image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 6, name: "Bier (6er Pack)", price: 8.90, category: "drinks", image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 7, name: "Zeitschrift", price: 4.20, category: "newspapers", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 8, name: "Zigarre", price: 5.80, category: "tobacco", image: "https://images.unsplash.com/photo-1611251432887-30d28e2db793?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 9, name: "Frischkäse", price: 2.30, category: "food", image: "https://images.unsplash.com/photo-1567176303326-58bcfcad145d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 10, name: "Softdrink 1L", price: 1.50, category: "drinks", image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 11, name: "Comic-Heft", price: 3.80, category: "newspapers", image: "https://images.unsplash.com/photo-1629992101755-1f0d4b7c9b8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" },
+            { id: 12, name: "Feuerzeug", price: 1.20, category: "tobacco", image: "https://images.unsplash.com/photo-1585-4708357-4594a51f5d3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" }
+        ];
+
+        // Cart functionality
+        let cart = [];
+        const cartIcon = document.getElementById('cartIcon');
+        const cartModal = document.getElementById('cartModal');
+        const closeModal = document.querySelector('.close-modal');
+        const cartItemsContainer = document.getElementById('cartItems');
+        const cartCount = document.querySelector('.cart-count');
+        const subtotalElement = document.getElementById('subtotal');
+        const discountElement = document.getElementById('discount');
+        const totalElement = document.getElementById('total');
+        const seniorDiscountCheckbox = document.getElementById('seniorDiscount');
+        const productsGrid = document.getElementById('productsGrid');
+
+        // Display products
+        function displayProducts(category = 'all') {
+            productsGrid.innerHTML = '';
+            const filteredProducts = category === 'all' 
+                ? products 
+                : products.filter(product => product.category === category);
+            
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">${product.price.toFixed(2)}€</p>
+                        <button class="add-to-cart" data-id="${product.id}">In den Warenkorb</button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+            
+            // Add event listeners to add-to-cart buttons
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    addToCart(productId);
+                });
+            });
+        }
+
+        // Add to cart function
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            
+            updateCart();
+            showNotification(`${product.name} wurde zum Warenkorb hinzugefügt!`);
+        }
+
+        // Update cart display
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update cart items
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Ihr Warenkorb ist leer.</p>';
+            } else {
+                cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="item-details">
+                            <img src="${item.image}" alt="${item.name}" class="item-img">
+                            <div class="item-info">
+                                <h4>${item.name}</h4>
+                                <p>${item.price.toFixed(2)}€ pro Stück</p>
+                            </div>
+                        </div>
+                        <div class="item-controls">
+                            <button class="quantity-btn minus" data-id="${item.id}">-</button>
+                            <span class="item-quantity">${item.quantity}</span>
+                            <button class="quantity-btn plus" data-id="${item.id}">+</button>
+                            <span class="item-price">${(item.price * item.quantity).toFixed(2)}€</span>
+                            <span class="remove-item" data-id="${item.id}"><i class="fas fa-trash"></i></span>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(cartItem);
+                });
+                
+                // Add event listeners to quantity buttons
+                document.querySelectorAll('.quantity-btn.plus').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const productId = parseInt(e.target.getAttribute('data-id'));
+                        const item = cart.find(item => item.id === productId);
+                        if (item) item.quantity += 1;
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.quantity-btn.minus').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const productId = parseInt(e.target.getAttribute('data-id'));
+                        const item = cart.find(item => item.id === productId);
+                        if (item && item.quantity > 1) {
+                            item.quantity -= 1;
+                        } else {
+                            cart = cart.filter(item => item.id !== productId);
+                        }
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const productId = parseInt(e.target.closest('.remove-item').getAttribute('data-id'));
+                        cart = cart.filter(item => item.id !== productId);
+                        updateCart();
+                    });
+                });
+            }
+            
+            // Calculate totals
+            calculateTotals();
+        }
+
+        // Calculate cart totals
+        function calculateTotals() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let discount = 0;
+            
+            // Apply senior discount if checkbox is checked
+            if (seniorDiscountCheckbox.checked) {
+                if (subtotal > 100) {
+                    discount = subtotal * 0.3;
+                } else if (subtotal > 60) {
+                    discount = subtotal * 0.2;
+                } else if (subtotal > 30) {
+                    discount = subtotal * 0.1;
+                }
+            }
+            
+            const total = subtotal - discount;
+            
+            subtotalElement.textContent = `${subtotal.toFixed(2)}€`;
+            discountElement.textContent = `${discount.toFixed(2)}€`;
+            totalElement.textContent = `${total.toFixed(2)}€`;
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--primary);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 5px;
+                box-shadow: var(--shadow);
+                z-index: 1001;
+                animation: slideInRight 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Display all products initially
+            displayProducts();
+            
+            // Category filter functionality
+            document.querySelectorAll('.category-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    document.querySelectorAll('.category-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    e.target.classList.add('active');
+                    displayProducts(e.target.getAttribute('data-category'));
+                });
+            });
+            
+            // Cart modal functionality
+            cartIcon.addEventListener('click', () => {
+                cartModal.style.display = 'flex';
+            });
+            
+            closeModal.addEventListener('click', () => {
+                cartModal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    cartModal.style.display = 'none';
+                }
+            });
+            
+            // Senior discount checkbox change
+            seniorDiscountCheckbox.addEventListener('change', calculateTotals);
+            
+            // Checkout button
+            document.querySelector('.checkout-btn').addEventListener('click', () => {
+                if (cart.length === 0) {
+                    alert('Ihr Warenkorb ist leer. Bitte fügen Sie Produkte hinzu.');
+                    return;
+                }
+                
+                const total = parseFloat(totalElement.textContent);
+                if (total < 50) {
+                    alert('Der Mindestbestellwert für die Lieferung beträgt 50€. Bitte fügen Sie weitere Produkte hinzu.');
+                    return;
+                }
+                
+                alert('Vielen Dank für Ihre Bestellung! Wir werden Sie in Kürze kontaktieren, um die Lieferdetails zu besprechen.');
+                cart = [];
+                updateCart();
+                cartModal.style.display = 'none';
+                seniorDiscountCheckbox.checked = false;
+            });
+        });
+
+        // Add CSS for notification animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
